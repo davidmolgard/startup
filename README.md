@@ -1,4 +1,4 @@
-# startup
+# SmashNotes
 ### Elevator pitch
 
 With so many playable characters in the game of Super Smash Brothers Ultimate, it can be hard to always remember how to play against everyone! Well worry no longer. With this website, you can easily keep track of notes on how you beat each character last time you played them, including stage ban information. Also if you need to fill in your matchup knowledge, ask others for their experience seamlessly.
