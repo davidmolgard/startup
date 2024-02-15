@@ -1,8 +1,8 @@
 body {
     display: flex;
     flex-direction: column;
-    min-width: 375px;
-    color:black
+    min-width: 300px;
+    color:black;
 }
 
 header {
@@ -26,5 +26,21 @@ li {
 }
 
 main {
-    flex:1 ;
+    flex: 1 calc(100vh - 180px);
 }
+
+menu .nav-item {
+    padding: 0 0.3em;
+  }
+
+@media (max-height: 600px) {
+    header {
+      display: none;
+    }
+    footer {
+      display: none;
+    }
+    main {
+      flex: 1 100vh;
+    }
+  }
