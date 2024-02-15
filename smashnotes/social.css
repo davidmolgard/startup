@@ -1,0 +1,68 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    color:black;
+}
+
+header {
+    flex: 0 60px;
+}
+
+footer {
+    flex: 0 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+span {
+    padding: 0.3em;
+}
+
+menu {
+    flex: 1;
+    display: flex;
+    /*  overwrite Bootstrap so the menu does not wrap */
+    flex-direction: row !important;
+    list-style: none;
+}
+
+main li {
+    padding: 3px;
+    list-style:square;
+}
+
+form {
+    padding-bottom: 1em;
+}
+
+main {
+    flex: 1 calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+menu .nav-item {
+    padding: 0 0.3em;
+}
+
+h2,h3 {
+    color:darkblue;
+}
+
+
+
+@media (max-height: 600px) {
+    header {
+        display: none;
+    }
+    footer {
+        display: none;
+    }
+    main {
+        flex: 1 100vh;
+    }
+}
