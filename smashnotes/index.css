@@ -6,11 +6,17 @@ body {
 }
 
 header {
-    flex: 0 80px;
+    flex: 0 50px;
 }
 
 footer {
     flex: 0 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+span {
+    padding: 0.3em;
 }
 
 menu {
@@ -26,21 +32,26 @@ li {
 }
 
 main {
-    flex: 1 calc(100vh - 180px);
+    flex: 1 calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
 }
 
 menu .nav-item {
     padding: 0 0.3em;
-  }
+}
 
 @media (max-height: 600px) {
     header {
-      display: none;
+        display: none;
     }
     footer {
-      display: none;
+        display: none;
     }
     main {
-      flex: 1 100vh;
+        flex: 1 100vh;
     }
-  }
+}
