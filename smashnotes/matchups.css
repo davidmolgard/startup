@@ -6,7 +6,7 @@ body {
 }
 
 header {
-    flex: 0 50px;
+    flex: 0 60px;
 }
 
 footer {
@@ -34,15 +34,32 @@ li {
 main {
     flex: 1 calc(100vh - 120px);
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     text-align: center;
-    justify-content: center;
 }
+
 
 menu .nav-item {
     padding: 0 0.3em;
 }
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+}
+
+.image-grid a {
+    display: block;
+    text-decoration: none;
+}
+
+/*.image-grid img {
+    width: 100%;
+    height: auto;
+    max-width: 60px;
+    min-width: 60px;
+} */
 
 @media (max-height: 600px) {
     header {
