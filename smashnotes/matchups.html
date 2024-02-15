@@ -14,22 +14,20 @@
       crossorigin="anonymous"
     />
 </head>
-<body>
-    <header>
-        <p>
-            <span>Username:</span>
-            <span>USERNAME</span>
-        </p>
-        <menu>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="matchups.html">Matchups</a></li>
-            <li><a href="social.html">Social</a></li>
-        </menu>
+<body class="bg-dark text-light">
+    <header class="container-fluid">
+        <nav class="navbar fixed-top navbar-dark">
+            <a class="navbar-brand" href="#">Username: USERNAME</a>
+            <menu class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="profile.html">Profile</a></li>
+                <li class="nav-item"><a class="nav-link active" href="matchups.html">Matchups</a></li>
+                <li class="nav-item"><a class="nav-link active" href="social.html">Social</a></li>
+            </menu>
+        </nav>
     </header>
 
-    <hr />
-    <main>
+    <main class="container-fluid bg-secondary text-center">
         <h2>Select a matchup:</h2>
 <!-- Steve -->
 <a href="notes.html"><img alt="Steve" src="https://ultimateframedata.com/characterart/steve.webp" width="60" /></a>
@@ -274,11 +272,9 @@
 
     </main>
 
-    <footer>
-        <hr />
-        <span>David Molgard</span>
-        <br />
-        <a href="https://github.com/davidmolgard/startup">GitHub</a>
+    <footer class="container-fluid text-light">
+        <span class="text-reset">David Molgard</span>
+        <span><a class="text-reset" href="https://github.com/davidmolgard/startup">GitHub</a></span>
     </footer>
 </body>
 </html>
