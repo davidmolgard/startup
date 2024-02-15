@@ -50,3 +50,12 @@ This website features:
 - Placeholder info from database such as settings and main in the profile tab, username and password on the home tab, registered users being searchable on the social tab, and notes on the notes tab.
 - Placeholder WebSocket data for the other players currently online and placeholder buttons to request their notes.
 
+### Startup CSS
+
+This website features:
+
+- CSS styled Header, footer, and main content body
+- CSS styled navigation bar from bootstrap
+- Flex based responsive sizing
+- CSS styled text, lists, and images
+
