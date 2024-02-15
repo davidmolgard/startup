@@ -24,3 +24,7 @@ menu {
 li {
     padding: 3px;
 }
+
+main {
+    flex:1 ;
+}
