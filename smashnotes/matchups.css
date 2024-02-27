@@ -6,10 +6,13 @@ body {
 }
 
 header {
+    background: #32a7ff;
     flex: 0 60px;
 }
 
 footer {
+    bottom: 0;
+    background: #32a7ff;
     flex: 0 30px;
     display: flex;
     flex-direction: row;
@@ -32,8 +35,10 @@ li {
 }
 
 main {
-    flex: 1 calc(100vh - 120px);
+    flex: 1 calc(100vh - 100px);
     display: flex;
+    background: #dbf3fa;
+    color: #62ca6b;
     flex-direction: column;
     text-align: center;
 }
@@ -53,13 +58,6 @@ menu .nav-item {
     display: block;
     text-decoration: none;
 }
-
-/*.image-grid img {
-    width: 100%;
-    height: auto;
-    max-width: 60px;
-    min-width: 60px;
-} */
 
 @media (max-height: 600px) {
     header {
