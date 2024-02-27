@@ -30,6 +30,11 @@ menu {
     list-style: none;
 }
 
+#username {
+    top: 20px;
+    right: 20px;
+}
+
 li {
     padding: 3px;
 }
