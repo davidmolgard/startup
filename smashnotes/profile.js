@@ -18,6 +18,19 @@ function updateMainImage() {
         myMainImage.src = imageURL;
     }
 }
+
+function loadPrivacy() {
+    let currentPrivacy = localStorage.getItem("private") || "false";
+    if (currentPrivacy === "true") {
+        document.getElementById("private").textContent = "PRIVATE";
+        document.getElementById("privacyButton").textContent = "Set Public";
+    }
+    else {
+        document.getElementById("private").textContent = "PUBLIC";
+        document.getElementById("privacyButton").textContent = "Set Private";
+    }
+}
+
 function updateMain(main) {
     localStorage.setItem("myMain", main);
     updateMainImage();
@@ -25,6 +38,17 @@ function updateMain(main) {
 
 function getMain() {
     return localStorage.getItem("myMain") || mario; 
+}
+
+function changePrivacy() {
+    let currentPrivacy = localStorage.getItem("private") || "false";
+    if (currentPrivacy === "false") {
+        localStorage.setItem("private", "true");
+    }
+    else {
+        localStorage.setItem("private", "false");
+    }
+    loadPrivacy();
 }
 
 class Player {
