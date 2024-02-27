@@ -1,4 +1,4 @@
-document.getElementById("username").textContent = localStorage.getItem("username");
+document.getElementById("username").textContent = getUsername();
 document.getElementById("myMain").textContent = localStorage.getItem("myMain");
 updateMainImage();
 
