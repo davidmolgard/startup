@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smash Notes</title>
     <link rel="icon" href="favicon.ico" />
-
+    <script src="login.js"></script>
     <link rel="stylesheet" href="index.css" />
 
     <!-- Include bootstrap CSS framework -->
@@ -32,14 +32,14 @@
     <main class="container-fluid text-center">
         <h1>Welcome</h1>
         <p>Login to play</p>
-        <form method="get" action="matchups.html">
+        <div>
             <label for="username">Username</label>
             <input type="text" id="username" placeholder="username" required/>
             <br />
             <label for="password">Password</label>
             <input type="text" id="password" placeholder="password" required/>
-            <button type="submit">Login</button>
-        </form>
+            <button onclick="login()">Login</button>
+        </div>
     </main>
 
     <footer class="container-fluid text-light">
