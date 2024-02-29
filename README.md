@@ -59,3 +59,11 @@ This website features:
 - Flex based responsive sizing
 - CSS styled text, lists, and images
 
+### Startup JavaScript
+
+This website features:
+
+- Javascript login and password stored in localStorage, preparatory for use with database
+- Javascript storage of player data, such as main, notes, and username, with dynamic images, notes, and usernames displayed based on user data
+- Javascript placeholder for future websockets of current online players and their main. Currently uses localStorage data of previously logged in players
+- Javascript Stub for future use of API to fetch upcoming tournament data
