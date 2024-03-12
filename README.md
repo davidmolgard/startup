@@ -67,3 +67,17 @@ This website features:
 - Javascript storage of player data, such as main, notes, and username, with dynamic images, notes, and usernames displayed based on user data
 - Javascript placeholder for future websockets of current online players and their main. Currently uses localStorage data of previously logged in players
 - Javascript Stub for future use of API to fetch upcoming tournament data
+
+### Startup Services
+
+This website features:
+
+- HTTP endpoints with services hosted on a server using Node.js and Express
+- Static files for frontend served up by express
+- 3rd party service (start.gg) called to get upcoming tournaments
+- Service endpoints for login (generates authorization tokens to allow retrieval of username later)
+- Service endpoint to retrieve notes
+- Service endpoint to update notes
+- Service endpoint to retrieve main
+- Service endpoint to retrieve if a user is authorized, and if so, their username
+- Service endpoint to retrieve list of concurrent users
