@@ -87,7 +87,7 @@ apiRouter.post('/notes', (req, res) => {
     const username = authTokens.get(authToken);
     if (username) {
         const existingPlayer = currentPlayers.find(player => player.username === username);
-
+        existingPlayer.notes = existingPlayer.notes || [];
         // Check if the request body contains the expected structure
         if (req.body && req.body.character && req.body.note) {
             const character = req.body.character;

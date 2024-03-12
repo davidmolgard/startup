@@ -1,5 +1,5 @@
 document.getElementById("username").textContent = getUsername();
-document.getElementById("note-box").textContent = getNote(getNotesCharacter());
+updateNoteOnScreen();
 updateCharacterImage();
 
 function updateCharacterImage() {
@@ -16,31 +16,57 @@ function updateCharacterImage() {
     }
 }
 
+async function updateNoteOnScreen() {
+    let note = await getNote(getNotesCharacter());
+    document.getElementById("note-box").textContent = note;
+}
+
 function updateNote() {
     let note = document.getElementById("note-box").textContent;
-    let username = getUsername(); // Get the current username
-    let currentPlayers = JSON.parse(localStorage.getItem("currentPlayers"));
-    // Find the player by username
-    let player = currentPlayers.find(player => player.username === username);
-    // Get the character for which the note is being updated
     let character = getNotesCharacter();
-    // Check if the player and notes array exist
-    if (player && player.notes) {
-        // Check if there is an existing note for the character
-        let existingNote = player.notes.find(entry => entry[0] === character);
 
-        if (existingNote) {
-            // Update the existing note
-            existingNote[1] = note;
-        } else {
-            // Add a new note entry for the character
-            player.notes.push([character, note]);
-        }
-        // Save the updated player data back to local storage
-        localStorage.setItem("currentPlayers", JSON.stringify(currentPlayers));
+       // Get the authentication token from localStorage
+       let authToken = localStorage.getItem('authToken');
+
+       // Check if authToken is present
+       if (!authToken) {
+           console.error('Authentication token not found');
+           return;
+       }
+   
+       // Create an object with the character and note data
+       const requestBody = {
+           character: character,
+           note: note
+       };
+   
+       // Make a POST request to the /api/notes endpoint
+       fetch('/api/notes', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json',
+               'Authorization': `Bearer ${authToken}`
+           },
+           body: JSON.stringify(requestBody)
+       })
+       .then(response => {
+           // Check if the response status is OK (200)
+           if (response.ok) {
+               return response.json(); // Return the JSON data from the response
+           } else {
+               throw new Error(`Failed to save/update note: ${response.status}`);
+           }
+       })
+       .then(data => {
+           // Handle the data returned from the server if needed
+           console.log('Note saved/updated successfully:', data);
+       })
+       .catch(error => {
+           // Handle errors during the fetch operation
+           console.error('Error saving/updating note:', error);
+       });
         // Optionally, you can also update the displayed note on the page
-        document.getElementById("note-box").textContent = note;
-    }
+    document.getElementById("note-box").textContent = note;
     document.getElementById("saved").textContent = "Saved";
 }
 
@@ -84,9 +110,8 @@ function getUsername() {
 
 function getNote(character) {
     const authHeader = localStorage.getItem('authToken');
-    
+
     if (!authHeader) {
-        // Handle unauthorized access
         console.error('Unauthorized access. Please log in.');
         return Promise.reject('Unauthorized');
     }
@@ -102,10 +127,17 @@ function getNote(character) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        // Check if the response body is empty
+        if (response.headers.get('content-length') === '0') {
+            console.warn('Empty response body received.');
+            return [];
+        }
+
         return response.json();
     })
     .then(data => {
-        // Assuming data is an array of notes
+        console.log('Data received from server:', data);
         return findNote(character, data);
     })
     .catch(error => {
@@ -113,6 +145,7 @@ function getNote(character) {
         return Promise.reject(error);
     });
 }
+
 
 
 function findNote(character , notesArray) {
