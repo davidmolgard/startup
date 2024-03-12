@@ -13,3 +13,30 @@ app.use(express.static('public'));
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
+
+// Return the application's default page if the path is unknown
+app.use((_req, res) => {
+    res.sendFile('index.html', { root: 'public' });
+  });
+
+// Router for service endpoints
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
+
+
+let currentPlayers = [];
+//postPlayer
+apiRouter.post('/player', (req, res) => {
+    if (currentPlayers.find())
+    addPlayer(req.body);
+})
+
+
+
+class Player {
+    username;
+    password;
+    main;
+    private;
+    notes;
+}

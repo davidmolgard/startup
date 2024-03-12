@@ -19,12 +19,4 @@ class Player {
     main;
     private;
     notes;
-
-    constructor() {
-        this.username = localStorage.getItem("username");
-        this.password = localStorage.getItem("password");
-        this.main = localStorage.getItem("myMain");
-        this.private = localStorage.getItem("private");
-        this.notes = localStorage.getItem("notes") ? notes : [];
-    }
 }
