@@ -5,6 +5,49 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/index.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${startup/smashnotes}/index.js",
+            "skipFiles": ["<node_internals>/**"],
+            "outFiles": ["${startup/smashnotes}/out/**/*.js"]
+        },
+
+        {
+            "name": "Attach",
+            "port": 9229,
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "command": "npm start",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "Attach by Process ID",
+            "processId": "${command:PickProcess}",
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
