@@ -25,11 +25,39 @@ app.use(`/api`, apiRouter);
 
 
 let currentPlayers = [];
-//postPlayer
+let authTokens = new Map();
+
+// Endpoint to add a new player
 apiRouter.post('/player', (req, res) => {
-    if (currentPlayers.find())
-    addPlayer(req.body);
-})
+  const newPlayer = req.body;
+
+  // Check if the username already exists
+  const existingPlayer = currentPlayers.find(player => player.username === newPlayer.username);
+
+  if (existingPlayer) {
+    if (existingPlayer.password != player.password) {
+        return res.status(401).json({ error: 'Incorrect password' });
+    }
+  }
+
+  // Add the new player to the array
+  currentPlayers.push(newPlayer);
+
+  // Generate a random authToken
+  const authToken = generateRandomAuthToken();
+
+  // Store authToken with player's username
+  authTokens.set(newPlayer.username, authToken);
+
+  // Return the authToken
+  res.status(201).json({ authToken });
+});
+
+// Function to generate a random authToken
+function generateRandomAuthToken() {
+  const authToken = Math.random().toString(36).substr(2); // Generate a random string
+  return authToken;
+}
 
 
 
@@ -39,4 +67,12 @@ class Player {
     main;
     private;
     notes;
+
+    constructor() {
+        this.username = "";
+        this.password = "";
+        this.main = "mario";
+        this.private = "false";
+        this.notes = [];
+    }
 }
