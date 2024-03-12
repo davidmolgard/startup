@@ -49,18 +49,71 @@ function getNotesCharacter() {
 }
 
 function getUsername() {
-    return localStorage.getItem("username");
+    const authToken = localStorage.getItem("authToken");
+
+    // Check if authToken is available
+    if (authToken) {
+        fetch('/api/player', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,  // Include the authToken in the Authorization header
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                // If the response is successful, parse the JSON
+                return response.json();
+            } else {
+                // If the response is not successful, handle the error
+                throw new Error('Failed to fetch username');
+            }
+        })
+        .then(data => {
+            // Update the UI with the retrieved username
+            document.getElementById("username").textContent = data.username;
+        })
+        .catch(error => {
+            // Handle errors, e.g., display an error message
+            console.error('Error:', error.message);
+        });
+    } else {
+        console.error('Auth token not found');
+    }
 }
 
 function getNote(character) {
-    let player = findPlayerByUsername(getUsername());
-    return findNote(character, player.notes);
+    const authHeader = localStorage.getItem('authToken');
+    
+    if (!authHeader) {
+        // Handle unauthorized access
+        console.error('Unauthorized access. Please log in.');
+        return Promise.reject('Unauthorized');
+    }
+
+    return fetch('/api/notes', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authHeader}`,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Assuming data is an array of notes
+        return findNote(character, data);
+    })
+    .catch(error => {
+        console.error('Error fetching notes:', error);
+        return Promise.reject(error);
+    });
 }
 
-function findPlayerByUsername(username) {
-    let currentPlayers = JSON.parse(localStorage.getItem("currentPlayers"));
-    return currentPlayers.find(player => player.username === username);
-}
 
 function findNote(character , notesArray) {
     if (notesArray) {
@@ -71,20 +124,4 @@ function findNote(character , notesArray) {
         }
     }
     return "Enter note here";
-}
-
-class Player {
-    username;
-    password;
-    main;
-    private;
-    notes;
-
-    constructor() {
-        this.username = localStorage.getItem("username");
-        this.password = localStorage.getItem("password");
-        this.main = localStorage.getItem("myMain");
-        this.private = localStorage.getItem("private");
-        this.notes = localStorage.getItem("notes") ? notes : [];
-    }
 }

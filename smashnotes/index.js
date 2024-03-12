@@ -63,6 +63,23 @@ apiRouter.get('/player', (req, res) => {
     }
 });
 
+apiRouter.get('/notes', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
+    const username = authTokens.get(authToken);
+    if (username) {
+        const existingPlayer = currentPlayers.find(player => player.username === username);
+        res.status(200).json(existingPlayer.notes);
+    } else {
+        res.status(404).json({ error: 'User not found' });
+    }
+})
+
 // Function to generate a random authToken
 function generateRandomAuthToken() {
     const authToken = Math.random().toString(36).substr(2); // Generate a random string
