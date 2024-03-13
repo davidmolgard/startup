@@ -2,6 +2,7 @@ async function login() {
     const currentPlayer = new Player();
     const nameEl = document.querySelector("#username");
     const passwordEl = document.querySelector("#password");
+    currentPlayer.main = "mario";
     currentPlayer.username = nameEl.value;
     currentPlayer.password = passwordEl.value;
     currentPlayer.private = "false";

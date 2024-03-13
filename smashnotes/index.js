@@ -113,7 +113,7 @@ apiRouter.post('/notes', (req, res) => {
     }
 });
 
-apiRouter.get('main', (req, res) => {
+apiRouter.get('/main', (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -129,7 +129,7 @@ apiRouter.get('main', (req, res) => {
     }
 })
 
-apiRouter.post('main', (req, res) => {
+apiRouter.post('/main', (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -138,8 +138,61 @@ apiRouter.post('main', (req, res) => {
     const username = authTokens.get(authToken);
     if (username) {
         const existingPlayer = currentPlayers.find(player => player.username === username);
-        existingPlayer.main = req.body;
+        existingPlayer.main = req.body.main;
         res.status(200).json(existingPlayer.main);
+    }
+    else {
+        res.status(404).json({ error: 'User not found' });
+    }
+})
+
+apiRouter.get('/privacy', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
+    const username = authTokens.get(authToken);
+    if (username) {
+        const existingPlayer = currentPlayers.find(player => player.username === username);
+        res.status(200).json(existingPlayer.privacy);
+    }
+    else {
+        res.status(404).json({ error: 'User not found' });
+    }
+})
+
+apiRouter.post('/privacy', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
+    const username = authTokens.get(authToken);
+    if (username) {
+        const existingPlayer = currentPlayers.find(player => player.username === username);
+        if (existingPlayer.privacy === "false") {
+            existingPlayer.privacy = "true";
+        }
+        else {
+            existingPlayer.privacy = "false";
+        }
+        res.status(200).json(existingPlayer.privacy);
+    }
+    else {
+        res.status(404).json({ error: 'User not found' });
+    }
+})
+
+apiRouter.get("/players", (req, res) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
+    const username = authTokens.get(authToken);
+    if (username) {
+        res.status(200).json(currentPlayers);
     }
     else {
         res.status(404).json({ error: 'User not found' });
