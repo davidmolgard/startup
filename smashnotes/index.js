@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const config = require('./config.json');
 
 // The service port. In production, the front-end code is statically hosted by the service on the same port.
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -197,6 +198,10 @@ apiRouter.get("/players", (req, res) => {
     else {
         res.status(404).json({ error: 'User not found' });
     }
+})
+
+apiRouter.get("/startgg", (req, res) => {
+    res.status(200).json({"authToken" : `${config.authToken}`});
 })
 
 // Function to generate a random authToken

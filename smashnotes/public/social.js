@@ -59,48 +59,63 @@ async function updateOnlinePlayers() {
 async function updateTournamentInfo() {
     const endpoint = 'https://api.start.gg/gql/alpha'; 
 
-const query = `
-  query TournamentsByVideogame {
-    tournaments(query: {
-      perPage: 3
-      page: 1
-      sortBy: "startAt asc"
-      filter: {
-        upcoming: true
-        videogameIds: [1386]
-        countryCode: "US"
-      }
-    }) {
-      nodes {
-        name
-        slug
-      }
+    const query = `
+    query TournamentsByVideogame {
+        tournaments(query: {
+        perPage: 3
+        page: 1
+        sortBy: "startAt asc"
+        filter: {
+            upcoming: true
+            videogameIds: [1386]
+            countryCode: "US"
+        }
+        }) {
+        nodes {
+            name
+            slug
+        }
+        }
     }
-  }
-`;
-
-fetch(endpoint, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    "Authorization": "Bearer 187e636cb835dfddf182024a26394293"
-  },
-  body: JSON.stringify({ "query" : query }),
-})
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response data here
-    for (let i = 1; i <= 3; i++) {
-        const tournamentId = "tournament" + i;
-        const linkId = "link" + i;
-        document.getElementById(tournamentId).textContent = data.data.tournaments.nodes[i-1].name;
-        document.getElementById(linkId).href = "https://start.gg/" + data.data.tournaments.nodes[i-1].slug;
-    } 
-  })
-  .catch(error => {
-    // Handle errors here
-    console.error(error);
-  });
+    `;
+    try {
+        // Fetch authToken from backend
+        const authTokenResponse = await fetch('/api/startgg', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+        if (!authTokenResponse.ok) {
+            throw new Error('Failed to fetch startgg authToken');
+        }
+        const authTokenData = await authTokenResponse.json();
+        
+        // Use authToken to fetch tournament data
+        const tournamentResponse = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authTokenData.authToken,
+            },
+            body: JSON.stringify({ "query" : query }),
+        });
+        if (!tournamentResponse.ok) {
+            throw new Error('Failed to fetch tournaments data');
+        }
+        const tournamentData = await tournamentResponse.json();
+        
+        // Update UI with tournament data
+        for (let i = 1; i <= 3; i++) {
+            const tournamentId = "tournament" + i;
+            const linkId = "link" + i;
+            document.getElementById(tournamentId).textContent = tournamentData.data.tournaments.nodes[i-1].name;
+            document.getElementById(linkId).href = "https://start.gg/" + tournamentData.data.tournaments.nodes[i-1].slug;
+        }
+    } catch (error) {
+        // Handle errors, e.g., display an error message
+        console.error('Error:', error.message);
+    }
 }
 
 
