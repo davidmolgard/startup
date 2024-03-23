@@ -79,11 +79,41 @@ async function updateNotes(token, notes) {
     }
 }
 
+async function getUsersAsPlayers() {
+    try {
+        const users = await userCollection.find({}).toArray();
+        
+        // Convert user objects to Player instances
+        const players = users.map(user => new Player(user.username, user.password, user.main, user.privacy, user.notes));
+
+        return players;
+    } catch (error) {
+        console.error('Error getting users as players:', error);
+        throw error; // Re-throw the error for handling at a higher level
+    }
+}
+
 module.exports = {
     getUser,
     getUserByToken,
+    getUsersAsPlayers,
     createUser,
     updateMainByToken,
     updatePrivacy,
     updateNotes,
 };
+
+class Player {
+    username;
+    password;
+    main;
+    private;
+    notes;
+    constructor(username, password, main, privacy, notes) {
+        this.username = username;
+        this.password = "nope";
+        this.main = main || "mario"; // Set default values if not provided
+        this.privacy = privacy || "false";
+        this.notes = notes || [];
+    }
+}

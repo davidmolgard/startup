@@ -185,19 +185,18 @@ apiRouter.post('/privacy', async (req, res) => {
     }
 })
 
-apiRouter.get("/players", (req, res) => {
+apiRouter.get("/players", async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
-    const username = authTokens.get(authToken);
-    if (username) {
-        res.status(200).json(currentPlayers);
+    const user = await DB.getUserByToken(authToken);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
     }
-    else {
-        res.status(404).json({ error: 'User not found' });
-    }
+    const players = await DB.getUsersAsPlayers();
+    res.status(200).json(players);
 })
 
 apiRouter.get("/startgg", (req, res) => {
