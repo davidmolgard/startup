@@ -1,5 +1,4 @@
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const app = express();
 const DB = require('./database.js');
@@ -33,9 +32,6 @@ apiRouter.post('/player/create', async (req, res) => {
     } else {
         const user = await DB.createUser(newPlayer.username, newPlayer.password);
         const authToken = user.token;
-        // Set the cookie
-        setAuthCookie(res, authToken);
-    
         res.status(201).json({ authToken });
     }
 });
@@ -46,7 +42,6 @@ apiRouter.post('/player/login', async (req, res) => {
     if (user) {
         if (await bcrypt.compare(newPlayer.password, user.password)) {
             const authToken = user.token;
-            setAuthCookie(res, authToken);
             return res.status(200).json({ authToken });
         }
     }
@@ -55,10 +50,13 @@ apiRouter.post('/player/login', async (req, res) => {
 
 apiRouter.get('/player', async (req, res) => {
     const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
     const user = await DB.getUserByToken(authToken);
     if (!user) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(404).json({ error: 'User not found' });
     }
     const username = user.username;
     res.status(200).json({ username });
@@ -66,6 +64,9 @@ apiRouter.get('/player', async (req, res) => {
 
 apiRouter.get('/notes', async (req, res) => {
     const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
     const user = await DB.getUserByToken(authToken);
     if (!user) {
