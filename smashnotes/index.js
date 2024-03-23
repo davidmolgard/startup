@@ -41,8 +41,17 @@ apiRouter.post('/player/create', async (req, res) => {
 });
 
 apiRouter.post('/player/login', async (req, res) => {
-    //FIXME
-})
+    const newPlayer = req.body;
+    const user = await DB.getUser(newPlayer.username);
+    if (user) {
+        if (await bcrypt.compare(newPlayer.password, user.password)) {
+            const authToken = user.token;
+            setAuthCookie(res, authToken);
+            return res.status(200).json({ authToken });
+        }
+    }
+    res.status(401).send({ msg: 'Unauthorized' });
+});
 
 apiRouter.get('/player', (req, res) => {
     const authHeader = req.headers['authorization'];
