@@ -131,20 +131,18 @@ apiRouter.get('/main', async (req, res) => {
     res.status(200).json(main);
 })
 
-apiRouter.post('/main', (req, res) => {
+apiRouter.post('/main', async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
-    const username = authTokens.get(authToken);
-    if (username) {
-        const existingPlayer = currentPlayers.find(player => player.username === username);
-        existingPlayer.main = req.body.main;
-        res.status(200).json(existingPlayer.main);
+    const result = await DB.updateMainByToken(authToken, req.body.main);
+    if (result.success) {
+        return res.status(200).json(req.body.main);
     }
     else {
-        res.status(404).json({ error: 'User not found' });
+        res.status(404).json({ error: result.message });
     }
 })
 

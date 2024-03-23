@@ -25,16 +25,16 @@ function getUserByToken(token) {
     return userCollection.findOne({ token: token });
 }
 
-async function updateMainByUsername(username, newMain) {
-    const filter = { username: username };
+async function updateMainByToken(token, newMain) {
+    const filter = { token: token };
     const update = { $set: { main: newMain } };
 
     const result = await userCollection.updateOne(filter, update);
 
     if (result.modifiedCount === 1) {
-        return { success: true, message: `Main updated successfully for user ${username}` };
+        return { success: true, message: `Main updated successfully` };
     } else {
-        return { success: false, message: `User ${username} not found or main already set to ${newMain}` };
+        return { success: false, message: `User not found or main already set` };
     }
 }
 
@@ -58,4 +58,5 @@ module.exports = {
     getUser,
     getUserByToken,
     createUser,
+    updateMainByToken,
 };
