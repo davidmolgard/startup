@@ -16,3 +16,31 @@ const userCollection = db.collection('user');
   console.log(`Unable to connect to database with ${url} because ${ex.message}`);
   process.exit(1);
 });
+
+function getUser(username) {
+    return userCollection.findOne({ username: username });
+}
+
+function getUserByToken(token) {
+    return userCollection.findOne({ token: token });
+}
+
+async function createUser(username, password) {
+    // Hash the password before we insert it into the database
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = {
+        username: username,
+        password: passwordHash,
+        token: uuid.v4(),
+    };
+    await userCollection.insertOne(user);
+
+    return user;
+}
+
+module.exports = {
+    getUser,
+    getUserByToken,
+    createUser,
+};
