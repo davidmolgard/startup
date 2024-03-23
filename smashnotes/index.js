@@ -25,32 +25,22 @@ let currentPlayers = [];
 let authTokens = new Map();
 
 // Endpoint to add a new player
-apiRouter.post('/player/create', (req, res) => {
-    const newPlayer = req.body; // Express already parses JSON body, no need for JSON.parse
+apiRouter.post('/player/create', async (req, res) => {
+    const newPlayer = req.body; 
 
-    // Check if the username already exists
-    const existingPlayer = currentPlayers.find(player => player.username === newPlayer.username);
-
-    if (existingPlayer) {
-        if (existingPlayer.password != newPlayer.password) {
-            return res.status(401).json({ error: 'Incorrect password' });
-        }
+    if (await DB.getUser(newPlayer.username)) {
+        res.status(409).send({ msg: 'Existing user' });
     } else {
-        // Add the new player to the array
-        currentPlayers.push(newPlayer);
+        const user = await DB.createUser(newPlayer.username, newPlayer.password);
+        const authToken = user.token;
+        // Set the cookie
+        setAuthCookie(res, authToken);
+    
+        res.status(201).json({ authToken });
     }
-
-    // Generate a random authToken
-    const authToken = generateRandomAuthToken();
-
-    // Store authToken with player's username
-    authTokens.set(authToken, newPlayer.username);
-
-    // Return the authToken
-    res.status(201).json({ authToken });
 });
 
-apiRouter.post('/player/login', (req, res) => {
+apiRouter.post('/player/login', async (req, res) => {
     //FIXME
 })
 
