@@ -67,10 +67,23 @@ async function createUser(username, password) {
     return user;
 }
 
+async function updateNotes(token, notes) {
+    const filter = { token: token };
+    const update = { $set: { notes: notes } };
+
+    const result = await userCollection.updateOne(filter, update);
+    if (result.modifiedCount === 1) {
+        return { success: true, message: `Notes updated successfully` };
+    } else {
+        return { success: false, message: `User not found or note already set` };
+    }
+}
+
 module.exports = {
     getUser,
     getUserByToken,
     createUser,
     updateMainByToken,
     updatePrivacy,
+    updateNotes,
 };
