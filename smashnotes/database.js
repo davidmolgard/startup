@@ -25,6 +25,19 @@ function getUserByToken(token) {
     return userCollection.findOne({ token: token });
 }
 
+async function updateMainByUsername(username, newMain) {
+    const filter = { username: username };
+    const update = { $set: { main: newMain } };
+
+    const result = await userCollection.updateOne(filter, update);
+
+    if (result.modifiedCount === 1) {
+        return { success: true, message: `Main updated successfully for user ${username}` };
+    } else {
+        return { success: false, message: `User ${username} not found or main already set to ${newMain}` };
+    }
+}
+
 async function createUser(username, password) {
     // Hash the password before we insert it into the database
     const passwordHash = await bcrypt.hash(password, 10);
@@ -33,6 +46,8 @@ async function createUser(username, password) {
         username: username,
         password: passwordHash,
         token: uuid.v4(),
+        main: "mario",
+        notes: [],
     };
     await userCollection.insertOne(user);
 

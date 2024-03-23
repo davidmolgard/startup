@@ -117,20 +117,18 @@ apiRouter.post('/notes', (req, res) => {
     }
 });
 
-apiRouter.get('/main', (req, res) => {
+apiRouter.get('/main', async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
-    const username = authTokens.get(authToken);
-    if (username) {
-        const existingPlayer = currentPlayers.find(player => player.username === username);
-        res.status(200).json(existingPlayer.main);
+    const user = await DB.getUserByToken(authToken);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
     }
-    else {
-        res.status(404).json({ error: 'User not found' });
-    }
+    const main = user.main;
+    res.status(200).json(main);
 })
 
 apiRouter.post('/main', (req, res) => {
