@@ -81,3 +81,15 @@ This website features:
 - Service endpoint to retrieve main
 - Service endpoint to retrieve if a user is authorized, and if so, their username
 - Service endpoint to retrieve list of concurrent users
+
+### Startup Database
+
+This website features:
+
+- User credentials and data stored in a MongoDB database
+- New user registration
+- Existing user login
+- Rejection for incorrect password or registration of taken username
+- Restriction of use of rest of application if not logged in
+- User notes, privacy, and main persistently stored on database
+- Start.gg API access key remotely accessed from server
