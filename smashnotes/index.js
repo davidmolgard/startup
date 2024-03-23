@@ -53,21 +53,15 @@ apiRouter.post('/player/login', async (req, res) => {
     res.status(401).send({ msg: 'Unauthorized' });
 });
 
-apiRouter.get('/player', (req, res) => {
+apiRouter.get('/player', async (req, res) => {
     const authHeader = req.headers['authorization'];
-    
-    if (!authHeader) {
+    const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
+    const user = await DB.getUserByToken(authToken);
+    if (!user) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
-
-    const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
-    const username = authTokens.get(authToken);
-
-    if (username) {
-        res.status(200).json({ username });
-    } else {
-        res.status(404).json({ error: 'User not found' });
-    }
+    const username = user.username;
+    res.status(200).json({ username });
 });
 
 apiRouter.get('/notes', (req, res) => {
