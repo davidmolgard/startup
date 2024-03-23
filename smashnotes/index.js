@@ -25,7 +25,7 @@ let currentPlayers = [];
 let authTokens = new Map();
 
 // Endpoint to add a new player
-apiRouter.post('/player', (req, res) => {
+apiRouter.post('/player/create', (req, res) => {
     const newPlayer = req.body; // Express already parses JSON body, no need for JSON.parse
 
     // Check if the username already exists
@@ -49,6 +49,10 @@ apiRouter.post('/player', (req, res) => {
     // Return the authToken
     res.status(201).json({ authToken });
 });
+
+apiRouter.post('/player/login', (req, res) => {
+    //FIXME
+})
 
 apiRouter.get('/player', (req, res) => {
     const authHeader = req.headers['authorization'];
