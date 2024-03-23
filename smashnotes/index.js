@@ -44,8 +44,11 @@ apiRouter.post('/player/login', async (req, res) => {
             const authToken = user.token;
             return res.status(200).json({ authToken });
         }
+        else {
+            return res.status(400).send({ msg: 'Incorrect Password' });
+        }
     }
-    res.status(401).send({ msg: 'Unauthorized' });
+    res.status(400).send({ msg: 'Username not found' });
 });
 
 apiRouter.get('/player', async (req, res) => {

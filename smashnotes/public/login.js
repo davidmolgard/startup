@@ -10,7 +10,7 @@ async function login() {
         window.location.href = href;
     } catch (error) {
         // Handle error, for example, display an error message
-        document.getElementById("login-message").textContent = error.message;
+        document.getElementById("login-message").textContent = "Error: " + error.message;
     }
 }
 
@@ -28,7 +28,7 @@ async function create() {
         window.location.href = href;
     } catch (error) {
         // Handle error, for example, display an error message
-        document.getElementById("login-message").textContent = error.message;
+        document.getElementById("login-message").textContent = "Error: " + error.message;
     }
 }
 
@@ -40,10 +40,15 @@ async function addPlayer(player) {
             body: JSON.stringify(player),
         });
 
-        // Ensure the server returns the authToken
-        const { authToken } = await response.json();
-        localStorage.setItem('authToken', authToken);
-        return "matchups.html";
+        if (response.ok) {
+            const { authToken } = await response.json();
+            localStorage.setItem('authToken', authToken);
+            return "matchups.html";
+        }
+        else {
+            const responseData = await response.json();
+            throw new Error(responseData.msg);
+        }
     } catch (error) {
         // If there was an error then throw it
         throw error;
@@ -58,10 +63,15 @@ async function loginPlayer(player) {
             body: JSON.stringify(player),
         });
 
-        // Ensure the server returns the authToken
-        const { authToken } = await response.json();
-        localStorage.setItem('authToken', authToken);
-        return "matchups.html";
+        if (response.ok) {
+            const { authToken } = await response.json();
+            localStorage.setItem('authToken', authToken);
+            return "matchups.html";
+        }
+        else {
+            const responseData = await response.json();
+            throw new Error(responseData.msg);
+        }
     } catch (error) {
         // If there was an error then throw it
         throw error;

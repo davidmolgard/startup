@@ -195,3 +195,8 @@ async function changePrivacy() {
         console.error('Error updating privacy setting:', error);
     }
 }
+
+function logout() {
+    localStorage.setItem('authToken', '');
+    window.location.href = "index.html";
+}
