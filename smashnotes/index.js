@@ -79,33 +79,38 @@ apiRouter.get('/notes', async (req, res) => {
     res.status(200).json(notes);
 });
 
-apiRouter.post('/notes', (req, res) => {
+apiRouter.post('/notes', async (req, res) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
-    const username = authTokens.get(authToken);
-    if (username) {
-        const existingPlayer = currentPlayers.find(player => player.username === username);
-        existingPlayer.notes = existingPlayer.notes || [];
+    const user = await DB.getUserByToken(authToken);
+    if (user) {
+        let notes = user.notes || [];
         // Check if the request body contains the expected structure
         if (req.body && req.body.character && req.body.note) {
             const character = req.body.character;
             const note = req.body.note;
 
             // Find the index of the existing note for the given character, if it exists
-            const existingNoteIndex = existingPlayer.notes.findIndex(entry => entry[0] === character);
+            const existingNoteIndex = notes.findIndex(entry => entry[0] === character);
 
             if (existingNoteIndex !== -1) {
                 // Update the existing note
-                existingPlayer.notes[existingNoteIndex][1] = note;
+                notes[existingNoteIndex][1] = note;
             } else {
                 // Create a new note if it doesn't exist
-                existingPlayer.notes.push([character, note]);
+                notes.push([character, note]);
             }
-
-            res.status(200).json(existingPlayer.notes);
+            const result = await DB.updateNotes(authToken, notes);
+            if (result.success) {
+                res.status(200).json(notes);
+            }
+            else {
+                res.status(404).json({ error: result.message });
+            }
+            
         } else {
             res.status(400).json({ error: 'Invalid request body' });
         }
