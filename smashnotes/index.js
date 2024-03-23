@@ -73,13 +73,10 @@ apiRouter.get('/notes', async (req, res) => {
     const authToken = authHeader.split(' ')[1]; // Extract the token from the Authorization header
     const user = await DB.getUserByToken(authToken);
     if (!user) {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(404).json({ error: 'User not found' });
     }
-    if (user.notes) {
-        res.status(200).json(user.notes);
-    } else {
-        res.status(404).json({ error: 'Notes not found' });
-    }
+    const notes = user.notes;
+    res.status(200).json(notes);
 });
 
 apiRouter.post('/notes', (req, res) => {
@@ -201,12 +198,6 @@ apiRouter.get("/players", (req, res) => {
 apiRouter.get("/startgg", (req, res) => {
     res.status(200).json({"authToken" : `${config.authToken}`});
 })
-
-// Function to generate a random authToken
-function generateRandomAuthToken() {
-    const authToken = Math.random().toString(36).substr(2); // Generate a random string
-    return authToken;
-}
 
 class Player {
     username;
