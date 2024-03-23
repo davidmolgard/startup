@@ -38,6 +38,18 @@ async function updateMainByToken(token, newMain) {
     }
 }
 
+async function updatePrivacy(token, newPrivacy) {
+    const filter = { token: token };
+    const update = { $set: { privacy: newPrivacy } };
+
+    const result = await userCollection.updateOne(filter, update);
+    if (result.modifiedCount === 1) {
+        return { success: true, message: `Privacy updated successfully` };
+    } else {
+        return { success: false, message: `User not found or privacy already set` };
+    }
+}
+
 async function createUser(username, password) {
     // Hash the password before we insert it into the database
     const passwordHash = await bcrypt.hash(password, 10);
@@ -47,6 +59,7 @@ async function createUser(username, password) {
         password: passwordHash,
         token: uuid.v4(),
         main: "mario",
+        privacy: "false",
         notes: [],
     };
     await userCollection.insertOne(user);
@@ -59,4 +72,5 @@ module.exports = {
     getUserByToken,
     createUser,
     updateMainByToken,
+    updatePrivacy,
 };
